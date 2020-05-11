@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package api;
+
+service Increment {
+    rpc GetNumber (Request) returns (Response);
+    rpc IncrementNumber (Request) returns (Response);
+    rpc SetSettings (Request) returns (Response);
+}
+
+message Request {
+    string id = 1;
+    uint64 size = 2;
+    uint64 max = 3;
+}
+
+message Response {
+    uint64 number = 1;
+    string id = 2;
+    string code = 3;
+    string message = 4;
+}
+//protoc --go_out=plugins=grpc:. rpc.proto
