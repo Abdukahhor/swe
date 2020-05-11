@@ -15,4 +15,6 @@ type DB interface {
 	UpdateSetting(id string, size uint64, max uint64) (err error)
 	//
 	IsNotFound(err error) bool
+	//Close database
+	Close() error
 }

@@ -7,12 +7,12 @@ type Core struct {
 	db storage.DB
 }
 
-//New instance of Core
+//New - инициализировать новый экземпляр Core
 func New(s storage.DB) *Core {
 	return &Core{db: s}
 }
 
-//Reply -
+//Reply - структура ответа для Core
 type Reply struct {
 	Code    int32
 	Message string

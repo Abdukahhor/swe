@@ -2,7 +2,7 @@ package app
 
 import "log"
 
-//Increment -
+//Increment - Increases the current number by the size of the increment.
 func (c Core) Increment(id string) Reply {
 	r := Success
 	if id == "" {

@@ -24,6 +24,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	defer db.Close()
 
 	l, err := net.Listen("tcp", *addr)
 	if err != nil {
