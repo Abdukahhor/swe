@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api;
+package rpcpb;
 
 service Increment {
     rpc GetNumber (Request) returns (Response);
@@ -17,7 +17,7 @@ message Request {
 message Response {
     uint64 number = 1;
     string id = 2;
-    string code = 3;
+    int32 code = 3;
     string message = 4;
 }
 //protoc --go_out=plugins=grpc:. rpc.proto

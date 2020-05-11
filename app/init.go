@@ -14,7 +14,7 @@ func New(s storage.DB) *Core {
 
 //Reply -
 type Reply struct {
-	Code    int
+	Code    int32
 	Message string
 	Num     uint64
 	ID      string
@@ -27,4 +27,5 @@ var (
 	DBError  = Reply{Code: 3, Message: "Ошибка базы данных"}
 	ErrSize  = Reply{Code: 4, Message: "Размер инкремента должен быть положительным"}
 	ErrMax   = Reply{Code: 5, Message: "Верхней границы инкремента должен быть положительным"}
+	ErrID    = Reply{Code: 6, Message: "Неверный ID"}
 )

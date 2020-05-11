@@ -19,40 +19,33 @@ func (p *db) Close() error {
 //Connect to embedded database,
 //BadgerDB is persistent and fast key-value (KV) database
 func Connect(path string) (DB, error) {
-
 	bg, err := badger.Open(badger.DefaultOptions(path))
 	if err != nil {
 		return nil, err
 	}
-
 	return &db{conn: bg}, nil
 }
 
 //Get gets number from storage by id
 func (p db) Get(id string) (num uint64, err error) {
 	var b []byte
-	b, err = p.get([]byte(id))
+
+	err = p.conn.View(func(txn *badger.Txn) error {
+		item, err := txn.Get([]byte(id))
+		if err != nil {
+			return err
+		}
+		err = item.Value(func(val []byte) error {
+			b = append([]byte{}, val...)
+			return nil
+		})
+		return err
+	})
 	if err != nil {
 		return
 	}
 	num = bytesToUint64(b[:8])
 	return
-}
-
-func (p db) get(key []byte) ([]byte, error) {
-	var rtn []byte
-	err := p.conn.View(func(txn *badger.Txn) error {
-		item, err := txn.Get(key)
-		if err != nil {
-			return err
-		}
-		err = item.Value(func(val []byte) error {
-			rtn = append([]byte{}, val...)
-			return nil
-		})
-		return err
-	})
-	return rtn, err
 }
 
 //Increment increments number by id

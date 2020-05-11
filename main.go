@@ -9,7 +9,7 @@ import (
 	"syscall"
 
 	"github.com/abdukahhor/swe/app"
-	"github.com/abdukahhor/swe/handlers/api"
+	"github.com/abdukahhor/swe/handlers/rpc"
 	"github.com/abdukahhor/swe/storage"
 	"google.golang.org/grpc"
 )
@@ -33,7 +33,7 @@ func main() {
 
 	s := grpc.NewServer()
 	c := app.New(db)
-	api.Register(s, c)
+	rpc.Register(s, c)
 
 	go func() {
 		sigint := make(chan os.Signal)
