@@ -1,7 +1,6 @@
 package storage
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -40,7 +39,6 @@ func TestDB(t *testing.T) {
 		if exp >= max {
 			exp = 0
 		}
-		fmt.Println(num, exp)
 		if num != exp {
 			t.Errorf("Returned = %d, Expected = %d", num, exp)
 		}

@@ -1,7 +1,10 @@
 # swe
 Задача для SWE (Golang)
 
-В проекте используется grpc (https://grpc.io). 
+В проекте используется grpc (https://grpc.io). Для база даных используется BadgerDB is 
+an embeddable, persistent and fast key-value (KV) database (https://github.com/dgraph-io/badger)
+
+
 
 Первый метод API -- GetNumber, он возвращает число. Сначала это число -- ноль. 
 
@@ -21,6 +24,7 @@
 функционал приложения. 
 
 ```
+RPC API
 
 Сначала нужно установить настройки и получить id инкремента, и можно редактировать настройки
 SetSettings(ctx context.Context, in *Request) (*Response, error)
