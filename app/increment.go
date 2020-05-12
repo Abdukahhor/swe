@@ -16,5 +16,6 @@ func (c Core) Increment(id string) Reply {
 		}
 		return DBError
 	}
+	r.ID = id
 	return r
 }
