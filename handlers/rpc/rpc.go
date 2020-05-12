@@ -19,13 +19,13 @@ func Register(s *grpc.Server, c *app.Core) {
 	pb.RegisterIncrementServer(s, &server{core: c})
 }
 
-//GetNumber - Возвращает текущее число по id инкремента. В самом начале это ноль.
+//GetNumber - Возвращает число по id инкремента. В самом начале это ноль.
 func (s *server) GetNumber(ctx context.Context, in *pb.Request) (*pb.Response, error) {
 	reply := s.core.Get(in.Id)
 	return &pb.Response{Number: reply.Num, Code: reply.Code, Message: reply.Message, Id: in.Id}, nil
 }
 
-//IncrementNumber - Увеличивает текущее число на размер инкремента.
+//IncrementNumber - Увеличивает число на размер инкремента.
 func (s *server) IncrementNumber(ctx context.Context, in *pb.Request) (*pb.Response, error) {
 	reply := s.core.Increment(in.Id)
 	return &pb.Response{Code: reply.Code, Message: reply.Message, Id: in.Id}, nil
