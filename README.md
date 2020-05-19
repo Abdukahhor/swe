@@ -1,5 +1,5 @@
 # swe
-Sample project in clean architecture (Golang)
+Sample project in clean code (Golang)
 
 In project is used grpc (https://grpc.io) and for database BadgerDB is 
 an embeddable, persistent and fast key-value (KV) database (https://github.com/dgraph-io/badger)
