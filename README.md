@@ -1,38 +1,38 @@
 # swe
-Задача для SWE (Golang)
+Sample project in clean architecture (Golang)
 
-В проекте используется grpc (https://grpc.io). Для база даных используется BadgerDB is 
+In project is used grpc (https://grpc.io) and for database BadgerDB is 
 an embeddable, persistent and fast key-value (KV) database (https://github.com/dgraph-io/badger)
 
 
 
-Первый метод API -- GetNumber, он возвращает число. Сначала это число -- ноль. 
+The first API method is GetNumber, it returns a number. At first this number is zero.
 
-Второй метод API -- IncrementNumber, он инкрементирует это число так, что при 
-следующем вызове GetNumber вернет на единицу больше. 
+The second API method is IncrementNumber; it increments this number so that when
+the next call to GetNumber will return one more.
 
-Третий метод SetSettings -- метод настроек. Настройки нужно сделать следующие:
-Размер инкремента (чтобы увеличивалось не на один, а на два, три или тысячу). 
-Размер инкремента должен быть положительным.
-Размер верхней границы. Если я поставлю ее 1000, то при доинкременчивании 
-до 1000 число сбрасывается на ноль само.
+The third SetSettings method is the settings method. Settings you need to do the following:
+The size of the increment (so that it does not increase by one, but by two, three or a thousand).
+The increment size must be positive.
+The max number of increment. If set it to 1000, then when incrementing
+up to 1000 the number is reset to zero by itself.
 
-Число и настройки должны переживать перезапуск приложения: если я доинкрементил до 10, 
-то при следующем запуске сервера GetNumber должно сразу возвращать 10, т.е. должно быть 
-персистентное хранилище. В качестве хранилища должна быть любая OS БД, способная пережить 
-выключение питания сервера, но не просто файл, так как файл не позволит наращивать 
-функционал приложения. 
+The number and settings must survive restarting the application: if have incremented to 10,
+then the next time the server starts, GetNumber should immediately return 10, i.e. should be
+persistent storage. The storage should be any OS database that can survive
+turning off the power of the server, but not just a file, since the file will not allow to grow
+application functionality.
 
 ```
 RPC API
 
-Сначала нужно установить настройки и получить id инкремента, и можно редактировать настройки
+First need to set the settings and returns the increment id, and can edit the settings
 SetSettings(ctx context.Context, in *Request) (*Response, error)
 
-Возвращает число по id инкремента
+Returns a number by increment id
 GetNumber(ctx context.Context, in *Request) (*Response, error)
 
-Увеличивает число по id инкремента на размер инкремента.
+Increments the number by increment id by the size of the increment.
 IncrementNumber(ctx context.Context, in *Request) (*Response, error) 
 
 ```
@@ -62,10 +62,9 @@ func main() {
 	client := pb.NewIncrementClient(c)
 	ctx := context.Background()
 
-	//SetSettings - настройка инкремента, size это размер инкремента, 
-	//max это размер верхней границы,
-	//возвращает id инкремента, и по этой id делаеться инкремент 
-	//(IncrementNumber) и возвращает число (GetNumber)
+	//SetSettings - sets settings of increment, size of increment, 
+	//max number of increment,
+	//returns id increment,
 	rsp, err := client.SetSettings(ctx, &pb.Request{Size: 2, Max: 50})
 	if err != nil {
 		fmt.Println("SetSettings", err)
