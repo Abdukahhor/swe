@@ -2,7 +2,7 @@ package app
 
 import "log"
 
-//Get - Возвращает текущее число
+//Get - returns number
 func (c Core) Get(id string) Reply {
 	r := Success
 	if id == "" {

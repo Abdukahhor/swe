@@ -1,6 +1,6 @@
 package app
 
-//Reply - структура ответа для Core
+//Reply - response structure for Core
 type Reply struct {
 	Code    int32
 	Message string
@@ -10,10 +10,10 @@ type Reply struct {
 
 // Replies list
 var (
-	Success  = Reply{Code: 1, Message: "Успешно"}
-	NotFound = Reply{Code: 2, Message: "Инкремент не найден"}
-	DBError  = Reply{Code: 3, Message: "Ошибка базы данных"}
-	ErrSize  = Reply{Code: 4, Message: "Размер инкремента должен быть положительным"}
-	ErrMax   = Reply{Code: 5, Message: "Верхней границы инкремента должен быть положительным"}
-	ErrID    = Reply{Code: 6, Message: "Неверный ID"}
+	Success  = Reply{Code: 1, Message: "Successfully"}
+	NotFound = Reply{Code: 2, Message: "ID not found"}
+	DBError  = Reply{Code: 3, Message: "Database Error"}
+	ErrSize  = Reply{Code: 4, Message: "Increment size must be positive."}
+	ErrMax   = Reply{Code: 5, Message: "The max number of the increment must be positive"}
+	ErrID    = Reply{Code: 6, Message: "Invalid ID"}
 )

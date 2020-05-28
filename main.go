@@ -20,6 +20,8 @@ func main() {
 		dbpath = flag.String("db", "sdb", "Folder path of the embedded database")
 	)
 
+	flag.Parse()
+
 	db, err := storage.Connect(*dbpath)
 	if err != nil {
 		log.Fatalln(err)
