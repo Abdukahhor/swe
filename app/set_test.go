@@ -4,6 +4,7 @@ import (
 	"log"
 	"testing"
 
+	"github.com/abdukahhor/swe/models"
 	"github.com/abdukahhor/swe/storage"
 )
 
@@ -15,17 +16,17 @@ func TestSet(t *testing.T) {
 	defer db.Close()
 	c := New(db)
 
-	reply := c.Set("", 0, 300)
-	if reply != ErrSize {
-		t.Error(reply, ErrSize)
+	reply := c.Set(models.Settings{ID: "", Size: 3, Max: 0})
+	if reply != models.ErrSize {
+		t.Error(reply, models.ErrSize)
 	}
 
-	reply = c.Set("", 3, 0)
-	if reply != ErrMax {
-		t.Error(reply, ErrMax)
+	reply = c.Set(models.Settings{ID: "", Size: 3, Max: 0})
+	if reply != models.ErrMax {
+		t.Error(reply, models.ErrMax)
 	}
 
-	reply = c.Set("", 4, 500)
+	reply = c.Set(models.Settings{ID: "", Size: 4, Max: 500})
 	if reply.Code != 1 {
 		t.Error(reply, "code is not success code")
 	}
@@ -44,7 +45,7 @@ func TestSet(t *testing.T) {
 		t.Error(reply.Num, "number is not 4")
 	}
 
-	reply = c.Set(reply.ID, 3, 100)
+	reply = c.Set(models.Settings{ID: reply.ID, Size: 3, Max: 100})
 	if reply.Code != 1 {
 		t.Error(reply, "code is not success code")
 	}

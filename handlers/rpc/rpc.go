@@ -5,6 +5,7 @@ import (
 
 	"github.com/abdukahhor/swe/app"
 	pb "github.com/abdukahhor/swe/handlers/rpcpb"
+	"github.com/abdukahhor/swe/models"
 	"google.golang.org/grpc"
 )
 
@@ -34,6 +35,6 @@ func (s *server) IncrementNumber(ctx context.Context, in *pb.Request) (*pb.Respo
 //SetSettings - increment setting, size is the size of the increment, max is the size of the upper border
 //returns the id of the increment, and this id is used to increment (IncrementNumber) and returns a number (GetNumber)
 func (s *server) SetSettings(ctx context.Context, in *pb.Request) (*pb.Response, error) {
-	reply := s.core.Set(in.Id, in.Size, in.Max)
+	reply := s.core.Set(models.Settings{ID: in.Id, Size: in.Size, Max: in.Max})
 	return &pb.Response{Code: reply.Code, Message: reply.Message, Id: reply.ID}, nil
 }

@@ -4,6 +4,7 @@ import (
 	"log"
 	"testing"
 
+	"github.com/abdukahhor/swe/models"
 	"github.com/abdukahhor/swe/storage"
 )
 
@@ -16,16 +17,16 @@ func TestGet(t *testing.T) {
 	c := New(db)
 
 	reply := c.Get("")
-	if reply != ErrID {
-		t.Error(reply, ErrID)
+	if reply != models.ErrID {
+		t.Error(reply, models.ErrID)
 	}
 
 	reply = c.Get("234234234")
-	if reply != NotFound {
-		t.Error(reply, NotFound)
+	if reply != models.NotFound {
+		t.Error(reply, models.NotFound)
 	}
 
-	reply = c.Set("", 4, 500)
+	reply = c.Set(models.Settings{ID: "", Size: 4, Max: 500})
 	if reply.ID == "" {
 		t.Error(reply, "id is empty")
 	}

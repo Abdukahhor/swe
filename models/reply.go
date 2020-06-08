@@ -1,4 +1,4 @@
-package app
+package models
 
 //Reply - response structure for Core
 type Reply struct {

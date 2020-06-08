@@ -1,5 +1,7 @@
 package storage
 
+import "github.com/abdukahhor/swe/models"
+
 // DB is interface for database
 type DB interface {
 	//Gets number from storage by id
@@ -10,9 +12,9 @@ type DB interface {
 	//size of increment,
 	//max number of increment
 	//return id of increment, id is unique and random generated
-	Setting(size uint64, max uint64) (id string, err error)
+	Setting(models.Settings) (id string, err error)
 	//updates increment settings
-	UpdateSetting(id string, size uint64, max uint64) (err error)
+	UpdateSetting(models.Settings) (err error)
 	//
 	IsNotFound(err error) bool
 	//Close database

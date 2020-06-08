@@ -3,6 +3,7 @@ package storage
 import (
 	"encoding/binary"
 
+	"github.com/abdukahhor/swe/models"
 	badger "github.com/dgraph-io/badger/v2"
 	"github.com/nats-io/nuid"
 )
@@ -84,24 +85,24 @@ func (p db) Increment(id string) (err error) {
 //size of increment,
 //max number of increment
 //return id of increment, id is unique and random generated
-func (p db) Setting(size uint64, max uint64) (id string, err error) {
+func (p db) Setting(s models.Settings) (id string, err error) {
 	err = p.conn.Update(func(txn *badger.Txn) error {
 		id = nuid.Next()
 		val := make([]byte, 24)
 		copy(val[:8], uint64ToBytes(0))
-		copy(val[8:16], uint64ToBytes(size))
-		copy(val[16:24], uint64ToBytes(max))
+		copy(val[8:16], uint64ToBytes(s.Size))
+		copy(val[16:24], uint64ToBytes(s.Max))
 		return txn.SetEntry(badger.NewEntry([]byte(id), val))
 	})
 	return
 }
 
 //updates increment settings
-func (p db) UpdateSetting(id string, size uint64, max uint64) (err error) {
+func (p db) UpdateSetting(s models.Settings) (err error) {
 	err = p.conn.Update(func(txn *badger.Txn) error {
 		var (
 			val []byte
-			key = []byte(id)
+			key = []byte(s.ID)
 		)
 		item, err := txn.Get(key)
 		if err != nil {
@@ -115,12 +116,11 @@ func (p db) UpdateSetting(id string, size uint64, max uint64) (err error) {
 			return err
 		}
 		num := bytesToUint64(val[:8])
-		max := bytesToUint64(val[16:24])
-		if num >= max {
+		if num >= s.Max {
 			copy(val[:8], uint64ToBytes(0))
 		}
-		copy(val[8:16], uint64ToBytes(size))
-		copy(val[16:24], uint64ToBytes(max))
+		copy(val[8:16], uint64ToBytes(s.Size))
+		copy(val[16:24], uint64ToBytes(s.Max))
 		return txn.SetEntry(badger.NewEntry(key, val))
 	})
 	return

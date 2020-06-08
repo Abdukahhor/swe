@@ -1,20 +1,24 @@
 package app
 
-import "log"
+import (
+	"log"
+
+	"github.com/abdukahhor/swe/models"
+)
 
 //Get - returns number
-func (c Core) Get(id string) Reply {
-	r := Success
+func (c Core) Get(id string) models.Reply {
+	r := models.Success
 	if id == "" {
-		return ErrID
+		return models.ErrID
 	}
 	num, err := c.db.Get(id)
 	if err != nil {
 		log.Println(err)
 		if c.db.IsNotFound(err) {
-			return NotFound
+			return models.NotFound
 		}
-		return DBError
+		return models.DBError
 	}
 	r.Num = num
 	r.ID = id

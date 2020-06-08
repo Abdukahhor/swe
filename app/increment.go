@@ -1,20 +1,24 @@
 package app
 
-import "log"
+import (
+	"log"
+
+	"github.com/abdukahhor/swe/models"
+)
 
 //Increment - Increases the current number by the size of the increment.
-func (c Core) Increment(id string) Reply {
-	r := Success
+func (c Core) Increment(id string) models.Reply {
+	r := models.Success
 	if id == "" {
-		return ErrID
+		return models.ErrID
 	}
 	err := c.db.Increment(id)
 	if err != nil {
 		log.Println(err)
 		if c.db.IsNotFound(err) {
-			return NotFound
+			return models.NotFound
 		}
-		return DBError
+		return models.DBError
 	}
 	r.ID = id
 	return r

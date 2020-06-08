@@ -1,37 +1,41 @@
 package app
 
+import (
+	"github.com/abdukahhor/swe/models"
+)
+
 //Set - increment settings
 //if id is empty sets new increment settings, else updates
-func (c Core) Set(id string, size, max uint64) Reply {
+func (c Core) Set(s models.Settings) models.Reply {
 	var (
-		r   = Success
+		r   = models.Success
 		err error
 	)
 
 	switch {
-	case size == 0:
-		return ErrSize
-	case max == 0:
-		return ErrMax
+	case s.Size == 0:
+		return models.ErrSize
+	case s.Max == 0:
+		return models.ErrMax
 	}
 
 	// set new increment settings
-	if id == "" {
-		r.ID, err = c.db.Setting(size, max)
+	if s.ID == "" {
+		r.ID, err = c.db.Setting(s)
 		if err != nil {
-			return DBError
+			return models.DBError
 		}
 		return r
 	}
 
 	// update increment settings
-	err = c.db.UpdateSetting(id, size, max)
+	err = c.db.UpdateSetting(s)
 	if err != nil {
 		if c.db.IsNotFound(err) {
-			return NotFound
+			return models.NotFound
 		}
-		return DBError
+		return models.DBError
 	}
-	r.ID = id
+	r.ID = s.ID
 	return r
 }

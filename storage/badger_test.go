@@ -2,16 +2,18 @@ package storage
 
 import (
 	"testing"
+
+	"github.com/abdukahhor/swe/model"
 )
 
 func TestDB(t *testing.T) {
-	var size, max uint64 = 3, 20
+	var s = model.Settings{Size: 3, Max: 20}
 	con, err := Connect("/tmp/testdb")
 	if err != nil {
 		t.Error(err)
 	}
 	defer con.Close()
-	id, err := con.Setting(size, max)
+	id, err := con.Setting(s)
 	if err != nil {
 		t.Error(err)
 	}
@@ -30,13 +32,13 @@ func TestDB(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-		exp += size
+		exp += s.Size
 		num, err = con.Get(id)
 		if err != nil {
 			t.Error(err)
 		}
 
-		if exp >= max {
+		if exp >= s.Max {
 			exp = 0
 		}
 		if num != exp {
