@@ -2,12 +2,15 @@ package rpc
 
 import (
 	"context"
+	"net"
 
 	"github.com/abdukahhor/swe/app"
 	pb "github.com/abdukahhor/swe/handlers/rpcpb"
 	"github.com/abdukahhor/swe/models"
 	"google.golang.org/grpc"
 )
+
+var defaultServer *grpc.Server
 
 //server
 type server struct {
@@ -16,8 +19,28 @@ type server struct {
 }
 
 //Register RPC Increment Server and grpc Server
-func Register(s *grpc.Server, c *app.Core) {
-	pb.RegisterIncrementServer(s, &server{core: c})
+func Register(c *app.Core) {
+	defaultServer = grpc.NewServer()
+	pb.RegisterIncrementServer(defaultServer, &server{core: c})
+}
+
+//Run serve grpc Server
+func Run(addr string) error {
+	l, err := net.Listen("tcp", addr)
+	if err != nil {
+		return err
+	}
+	defer l.Close()
+	err = defaultServer.Serve(l)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Close stop grpc Server
+func Close() {
+	defaultServer.GracefulStop()
 }
 
 //GetNumber - Returns a number by the increment id.

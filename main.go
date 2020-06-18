@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"log"
-	"net"
 	"os"
 	"os/signal"
 	"syscall"
@@ -11,7 +10,6 @@ import (
 	"github.com/abdukahhor/swe/app"
 	"github.com/abdukahhor/swe/handlers/rpc"
 	"github.com/abdukahhor/swe/storage"
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -28,27 +26,23 @@ func main() {
 	}
 	defer db.Close()
 
-	l, err := net.Listen("tcp", *addr)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	defer l.Close()
-
-	s := grpc.NewServer()
+	//init business layer
 	c := app.New(db)
-	rpc.Register(s, c)
+	//init rpc
+	rpc.Register(c)
 
 	go func() {
 		sigint := make(chan os.Signal)
 		signal.Notify(sigint, os.Interrupt, os.Kill, syscall.SIGTERM, syscall.SIGINT)
 		log.Println("server received signal ", <-sigint)
 
-		s.GracefulStop()
+		rpc.Close()
 		os.Exit(0)
 	}()
 
 	log.Println("server started at ", *addr)
-	err = s.Serve(l)
+	//serve rpc
+	err = rpc.Run(*addr)
 	if err != nil {
 		log.Fatalln(err)
 	}

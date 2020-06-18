@@ -3,11 +3,11 @@ package storage
 import (
 	"testing"
 
-	"github.com/abdukahhor/swe/model"
+	"github.com/abdukahhor/swe/models"
 )
 
 func TestDB(t *testing.T) {
-	var s = model.Settings{Size: 3, Max: 20}
+	var s = models.Settings{Size: 3, Max: 20}
 	con, err := Connect("/tmp/testdb")
 	if err != nil {
 		t.Error(err)
